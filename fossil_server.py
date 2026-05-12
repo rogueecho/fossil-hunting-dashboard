@@ -272,6 +272,16 @@ def deg_label(d):
     return COMPASS[int(((d or 0) + 11.25) // 22.5) % 16]
 
 # ── Scoring ───────────────────────────────────────────────────────────────
+def _intensity_multiplier(iph):
+    """Non-linear erosion weight per inch of rain based on hourly intensity (iph = inches/hour).
+    Light drizzle barely moves sediment; heavy bursts are disproportionately effective at
+    dislodging cliff material and exposing fossils."""
+    if iph >= 0.50: return 2.5   # flash/heavy — maximum runoff, rapid cliff erosion
+    if iph >= 0.25: return 1.8   # heavy — strong surface runoff
+    if iph >= 0.10: return 1.0   # moderate — reference baseline
+    if iph >= 0.04: return 0.4   # light — minimal erosion effect
+    return 0.1                   # trace/drizzle — almost geologically irrelevant
+
 def compute_score(weather, alerts, marine=None, clearing_sector=(200,315)):
     h      = weather["hourly"]
     now    = datetime.now()
@@ -280,6 +290,7 @@ def compute_score(weather, alerts, marine=None, clearing_sector=(200,315)):
 
     rain_past_raw = 0.0
     rain_past_eff = 0.0
+    rain_peak_iph = 0.0   # single-hour peak intensity in the lookback window
     rain_inc = 0.0  # kept for display; no longer scored globally (per-window instead)
     clearing_units  = 0
     rain_chart = []
@@ -289,12 +300,15 @@ def compute_score(weather, alerts, marine=None, clearing_sector=(200,315)):
         p = h["precipitation"][i] or 0
         s = h["windspeed_10m"][i] or 0
         d = h["winddirection_10m"][i] or 0
-        # past rainfall (raw + decay-weighted)
+        # past rainfall (raw + intensity-weighted + time-decayed)
         if cutoff <= t <= now:
             rain_past_raw += p
+            if p > rain_peak_iph:
+                rain_peak_iph = p
             age_h = max(0.0, (now - t).total_seconds()/3600.0)
             w = 1.0 if age_h <= 12 else (0.6 if age_h <= 36 else 0.3)
-            rain_past_eff += p * w
+            # Intensity multiplier: heavy bursts erode far more than the same volume as drizzle
+            rain_past_eff += p * w * _intensity_multiplier(p)
             # clearing: weight strong winds double
             if s >= 10 and in_sector(d, clearing_sector):
                 clearing_units += 2 if s >= 20 else 1
@@ -306,13 +320,20 @@ def compute_score(weather, alerts, marine=None, clearing_sector=(200,315)):
 
     pts, signals = 0, []
 
-    # Rainfall ramp (finer gradations)
-    if rain_past_eff >= 1.5:
-        pts += 3; signals.append({"text": f"Effective rain past {LOOKBACK_HOURS}h: {rain_past_eff:.2f}\" (raw {rain_past_raw:.2f}\")", "pts": 3})
-    elif rain_past_eff >= 0.75:
-        pts += 2; signals.append({"text": f"Effective rain past {LOOKBACK_HOURS}h: {rain_past_eff:.2f}\" (raw {rain_past_raw:.2f}\")", "pts": 2})
-    elif rain_past_eff >= 0.35:
-        pts += 1; signals.append({"text": f"Effective rain past {LOOKBACK_HOURS}h: {rain_past_eff:.2f}\" (raw {rain_past_raw:.2f}\")", "pts": 1})
+    # Rainfall score — intensity-weighted + time-decayed accumulation
+    # Thresholds are higher than raw inches because intense bursts inflate the effective total
+    rain_label = f"Intensity-weighted rain past {LOOKBACK_HOURS}h: {rain_past_eff:.2f} eff (raw {rain_past_raw:.2f}\", peak {rain_peak_iph:.2f}\"/hr)"
+    if rain_past_eff >= 2.5:
+        pts += 3; signals.append({"text": rain_label, "pts": 3})
+    elif rain_past_eff >= 1.0:
+        pts += 2; signals.append({"text": rain_label, "pts": 2})
+    elif rain_past_eff >= 0.4:
+        pts += 1; signals.append({"text": rain_label, "pts": 1})
+
+    # Peak intensity bonus: a single heavy burst earns +1 even if total accumulation was low
+    if rain_peak_iph >= 0.50 and pts < 3:  # only add if not already at rain cap
+        pts += 1
+        signals.append({"text": f"Peak intensity burst: {rain_peak_iph:.2f}\"/hr (high cliff erosion event)", "pts": 1})
 
     # Incoming rain: now scored per-window, not globally
 
