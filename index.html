@@ -289,7 +289,7 @@ function render(d){
         // Tide quality: exposure fraction vs NOAA station MHW datum
         const tideQual=w.tide_label||'';
         const isRowBest=w.qualifies&&bestWinScore>=5&&w.window_score===bestWinScore;
-        return `<div class="tide-row${w.qualifies?' tide-row-qualify':''}"`+'>`'
+        return `<div class="tide-row${w.qualifies?' tide-row-qualify':''}">`
           +`<div class="tide-row-top">`
           +`<span class="tide-row-time">${w.time}</span>`
           +`<span class="tide-row-ht">${w.height.toFixed(2)} ft MLLW — ${w.station_label||'Cove Point'}</span>`
