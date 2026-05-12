@@ -1,4 +1,4 @@
-# 🦕 Fossil Hunting Dashboard
+# 🦈 Fossil Hunting Dashboard
 
 A live-scoring dashboard for fossil hunting conditions along the Chesapeake Bay and Potomac River cliffs — specifically tuned for **Calvert Cliffs**, **Flag Pond**, **Purse State Park**, **Westmoreland State Park**, **Stratford Hall**, **Widewater SP**, and **Aquia Landing**.
 
