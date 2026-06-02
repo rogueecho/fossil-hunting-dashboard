@@ -189,6 +189,14 @@ function scoreColor(s){
   if(s>=4) return '#eab308';
   return '#64748b';
 }
+function conditionLabel(s){
+  if(s>=9) return {cls:'badge-on',text:'🏖️ Exceptional Beachcombing Conditions!'};
+  if(s>=7) return {cls:'badge-on',text:'🏖️ Great Day for Beachcombing!'};
+  if(s>=5) return {cls:'badge-on',text:'🏖️ Good Beachcombing Today'};
+  if(s>=3) return {cls:'badge-off',text:'🏖️ Fair Beachcombing Conditions'};
+  if(s>=1) return {cls:'badge-off',text:'🏖️ Poor Beachcombing Conditions'};
+  return {cls:'badge-off',text:'🏖️ Not Ideal for Beachcombing'};
+}
 
 function pickSite(d){
   const sel=document.getElementById('siteSelect')?.value||'calvert';
@@ -244,9 +252,8 @@ function render(d){
       document.querySelector('.score-denom').after(siteLabel);
     }
     siteLabel.textContent=sd.name||'';
-    badge.innerHTML=sd.would_alert
-      ?'<span class="badge badge-on">🏖️ Great Day for Beachcombing!</span>'
-      :'<span class="badge badge-off">🏖️ Good Day for Beachcombing</span>';
+    const cl=conditionLabel(sd.score||0);
+    badge.innerHTML=`<span class="badge ${cl.cls}">${cl.text}</span>`;
   }
 
   // Windows
