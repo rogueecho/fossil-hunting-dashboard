@@ -135,7 +135,7 @@ a{color:var(--blue);text-decoration:none}
 <div class="topbar">
   <div>
     <div class="brand">🦈 Fossil Hunting Dashboard</div>
-    <div class="brand-sub" id="brandSub">Calvert Cliffs &amp; Flag Pond — Chesapeake Bay, MD</div>
+    <div class="brand-sub" id="brandSub">Calvert Cliffs &amp; Flag Pond - Chesapeake Bay, MD</div>
   </div>
   <div class="topbar-right">
     <select class="btn" id="siteSelect" style="padding:5px 8px">
@@ -146,9 +146,8 @@ a{color:var(--blue);text-decoration:none}
       <option value="aquia">Aquia Landing</option>
       <option value="all">All Sites</option>
     </select>
-    <span class="ts" id="ts">Loading…</span>
+    <span class="ts" id="ts">Loading...</span>
     <button class="help-icon-btn" onclick="openHelp()" title="How to use this dashboard">?</button>
-    <button class="btn" id="refreshBtn" onclick="forceRefresh()">↻ Refresh</button>
   </div>
 </div>
 
@@ -162,31 +161,31 @@ a{color:var(--blue);text-decoration:none}
       <h3>📍 Choosing a Site</h3>
       <p>Use the <strong>site selector</strong> in the top-right to switch between locations:</p>
       <ul>
-        <li><strong>Calvert Cliffs</strong> — Flag Pond &amp; Calvert Cliffs SP, Chesapeake Bay (Miocene shark teeth &amp; bones)</li>
-        <li><strong>Purse S.P.</strong> — Purse State Park, Nanjemoy Creek, MD (small river beach)</li>
-        <li><strong>Westmoreland &amp; Stratford Hall</strong> — Fossil Beach, Potomac River, VA (shark teeth, rays, mosasaur)</li>
-        <li><strong>Widewater</strong> — Widewater State Park, VA (Potomac gravel bars)</li>
-        <li><strong>Aquia Landing</strong> — Aquia Creek, Stafford VA (Eocene Nanjemoy Formation)</li>
-        <li><strong>All Sites</strong> — Side-by-side score comparison for every location</li>
+        <li><strong>Calvert Cliffs</strong> - Flag Pond &amp; Calvert Cliffs SP, Chesapeake Bay (Miocene shark teeth &amp; bones)</li>
+        <li><strong>Purse S.P.</strong> - Purse State Park, Nanjemoy Creek, MD (small river beach)</li>
+        <li><strong>Westmoreland &amp; Stratford Hall</strong> - Fossil Beach, Potomac River, VA (shark teeth, rays, mosasaur)</li>
+        <li><strong>Widewater</strong> - Widewater State Park, VA (Potomac gravel bars)</li>
+        <li><strong>Aquia Landing</strong> - Aquia Creek, Stafford VA (Eocene Nanjemoy Formation)</li>
+        <li><strong>All Sites</strong> - Side-by-side score comparison for every location</li>
       </ul>
     </div>
 
     <div class="help-section">
       <h3>🔢 Condition Score</h3>
-      <p>A <strong>0–10 score</strong> for current fossil-hunting conditions, updated hourly. Higher = better exposure &amp; recent material turnover.</p>
+      <p>A <strong>0-10 score</strong> for current fossil-hunting conditions, updated hourly. Higher = better exposure &amp; recent material turnover.</p>
       <ul>
-        <li><span class="help-pill help-pill-green">7–10</span> Great to exceptional — prime time to go</li>
-        <li><span class="help-pill help-pill-yellow">4–6</span> Fair — worth going, conditions are moderate</li>
-        <li><span class="help-pill help-pill-muted">0–3</span> Poor — calm conditions, minimal fresh exposure</li>
+        <li><span class="help-pill help-pill-green">7-10</span> Great to exceptional - prime time to go</li>
+        <li><span class="help-pill help-pill-yellow">4-6</span> Fair - worth going, conditions are moderate</li>
+        <li><span class="help-pill help-pill-muted">0-3</span> Poor - calm conditions, minimal fresh exposure</li>
       </ul>
       <p style="margin-top:8px">The score combines signals like recent storm rain, bay-clearing winds, wave action, and current conditions over the past 72 hours.</p>
     </div>
 
     <div class="help-section">
       <h3>🏖️ Hunting Windows</h3>
-      <p>Low-tide windows during <strong>daylight hours (7AM–5PM)</strong> over the next 7 days — when beach exposure is greatest. Each card shows:</p>
+      <p>Low-tide windows during <strong>daylight hours (7AM-5PM)</strong> over the next 7 days - when beach exposure is greatest. Each card shows:</p>
       <ul>
-        <li><strong>Time &amp; tide height</strong> — lower tides = more beach exposed</li>
+        <li><strong>Time &amp; tide height</strong> - lower tides = more beach exposed</li>
         <li><strong>Window score</strong> — combines today's conditions score with the tide bonus. ⭐ marks the best window of the forecast period.</li>
         <li>Color-coded borders: <span style="color:var(--green)">■</span> weekend · <span style="color:var(--blue)">■</span> weekday · <span style="color:#a855f7">■</span> Purse SP</li>
         <li>Wind warnings shown when onshore/pushing winds will fight your beach access</li>
@@ -195,25 +194,25 @@ a{color:var(--blue);text-decoration:none}
 
     <div class="help-section">
       <h3>📊 Scoring Signals</h3>
-      <p>The signals panel (bottom-left) breaks down <em>why</em> the score is what it is. Each signal adds points — for example, heavy rain in the past 72h churns up new material, and bay-clearing SW winds expose more beach. No signals = calm conditions.</p>
+      <p>The signals panel (bottom-left) breaks down <em>why</em> the score is what it is. Each signal adds points - for example, heavy rain in the past 72h churns up new material, and bay-clearing SW winds expose more beach. No signals = calm conditions.</p>
     </div>
 
     <div class="help-section">
       <h3>🌊 Tide Chart &amp; Rainfall</h3>
       <ul>
-        <li><strong>Tide chart</strong> — 7-day NOAA forecast in feet MLLW. Hover to read exact height &amp; time. Yellow dashed lines mark noon each day.</li>
-        <li><strong>Rainfall</strong> — Past 72h (blue) and next 24h forecast (green) in inches. Recent rain is one of the strongest indicators of fresh fossil exposure.</li>
-        <li><strong>Wind</strong> — Direction &amp; speed shown below rainfall. <span style="color:var(--green)">Bay-clearing</span> winds push water away &amp; expose more beach. <span style="color:var(--red)">Bay-pushing</span> winds do the opposite.</li>
+        <li><strong>Tide chart</strong> - 7-day NOAA forecast in feet MLLW. Hover to read exact height &amp; time. Yellow dashed lines mark noon each day.</li>
+        <li><strong>Rainfall</strong> - Past 72h (blue) and next 24h forecast (green) in inches. Recent rain is one of the strongest indicators of fresh fossil exposure.</li>
+        <li><strong>Wind</strong> - Direction &amp; speed shown below rainfall. <span style="color:var(--green)">Bay-clearing</span> winds push water away &amp; expose more beach. <span style="color:var(--red)">Bay-pushing</span> winds do the opposite.</li>
       </ul>
     </div>
 
     <div class="help-section">
       <h3>🔄 Data Freshness</h3>
-      <p>Data auto-refreshes every <strong>15 minutes</strong>. Use the <strong>↻ Refresh</strong> button to force an immediate update. The timestamp in the top bar shows when data was last fetched from NOAA &amp; weather sources.</p>
+      <p>Data auto-refreshes every <strong>15 minutes</strong> automatically. The timestamp in the top bar shows when data was last fetched from NOAA &amp; weather sources.</p>
     </div>
 
     <div class="help-close-row">
-      <button class="help-close-btn" onclick="closeHelp()">Got it — let's hunt! 🦷</button>
+      <button class="help-close-btn" onclick="closeHelp()">Got it - let's hunt! 🦷</button>
     </div>
   </div>
 </div>
@@ -227,7 +226,7 @@ a{color:var(--blue);text-decoration:none}
     <div class="card">
       <div class="card-title">Condition Score</div>
       <div class="score-wrap">
-        <div class="score-num" id="scoreNum">—</div>
+        <div class="score-num" id="scoreNum">-</div>
         <div class="score-denom">out of 10</div>
         <div class="score-bar-track"><div class="score-bar-fill" id="scoreBar" style="width:0%"></div></div>
         <div id="badge"></div>
@@ -235,14 +234,14 @@ a{color:var(--blue);text-decoration:none}
     </div>
     <div class="card">
       <div class="card-title" id="windowsTitle">Qualifying Hunting Windows (Next 7 Days)</div>
-      <div class="windows-grid" id="windows"><div class="no-win">Loading tide windows…</div></div>
+      <div class="windows-grid" id="windows"><div class="no-win">Loading tide windows...</div></div>
     </div>
   </div>
 
   <!-- Tide chart -->
   <div class="card">
     <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
-      <span id="tideChartTitle">Tide Forecast — NOAA Station 8577330 (Cove Point, MD)</span>
+      <span id="tideChartTitle">Tide Forecast - NOAA Station 8577330 (Cove Point, MD)</span>
       <span style="color:#2d3748;font-size:.65rem">yellow dashes = noon</span>
     </div>
     <div class="chart-box h260"><canvas id="tideChart"></canvas></div>
@@ -252,10 +251,10 @@ a{color:var(--blue);text-decoration:none}
   <div class="row row-mid">
     <div class="card">
       <div class="card-title">Scoring Signals</div>
-      <div id="signals"><div class="no-sig">Loading…</div></div>
+      <div id="signals"><div class="no-sig">Loading...</div></div>
     </div>
     <div class="card">
-      <div class="card-title">Precipitation — Past 72h &amp; Next 24h</div>
+      <div class="card-title">Precipitation - Past 72h &amp; Next 24h</div>
       <div class="legend">
         <span><span class="legend-dot" style="background:rgba(59,130,246,.7)"></span>Past</span>
         <span><span class="legend-dot" style="background:rgba(34,197,94,.6)"></span>Forecast</span>
@@ -292,7 +291,7 @@ function pickSite(d){
   // Handle any site that might be missing from the API response (graceful fallback)
   if(!d.sites[sel]){
     const fb=document.getElementById('errBox');
-    if(fb){fb.style.display='block';fb.textContent=`⚠ Site data for "${sel}" not yet available — showing Calvert Cliffs.`;}
+    if(fb){fb.style.display='block';fb.textContent=`⚠ Site data for "${sel}" not yet available - showing Calvert Cliffs.`;}
   }
   const sd=d.sites[sel]||d.sites['calvert'];
   return {key:sel in d.sites?sel:'calvert', data:sd};
@@ -305,7 +304,7 @@ function render(d){
   const sd = pick.data||d; // fallback
   // Dynamic topbar subtitle
   const brandSub=document.getElementById('brandSub');
-  if(brandSub) brandSub.textContent=(pick.key==='all')?'All Sites — Chesapeake Bay & Potomac River':(sd.name||'Chesapeake Bay, MD');
+  if(brandSub) brandSub.textContent=(pick.key==='all')?'All Sites - Chesapeake Bay & Potomac River':(sd.name||'Chesapeake Bay, MD');
   // Score
   const sn=document.getElementById('scoreNum');
   const sf=document.getElementById('scoreBar');
@@ -352,13 +351,13 @@ function render(d){
   // Update windows title with count
   const wTitle=document.getElementById('windowsTitle');
   const qualCount=winList?winList.filter(w=>w.qualifies).length:0;
-  if(wTitle) wTitle.textContent=`Qualifying Hunting Windows — ${qualCount} found in next 7 days`;
+  if(wTitle) wTitle.textContent=`Qualifying Hunting Windows - ${qualCount} found in next 7 days`;
   // Find best window score for the star badge
   const bestWinScore=winList.filter(w=>w.qualifies).reduce((mx,w)=>Math.max(mx,w.window_score),0);
   if(!winList||!winList.length){
-    we.innerHTML='<div class="no-win">No low tides in visiting hours (7AM–5PM) found in the next 7 days.<br>Check back after storm activity.</div>';
+    we.innerHTML='<div class="no-win">No low tides in visiting hours (7AM-5PM) found in the next 7 days.<br>Check back after storm activity.</div>';
   } else {
-    // Group windows by calendar day + location — one card per day per site
+    // Group windows by calendar day + location - one card per day per site
     const dayGroups=new Map();
     winList.forEach(w=>{
       const dk=(w.ts?w.ts.slice(0,10):'')+'|'+(w.location||'');
@@ -375,18 +374,18 @@ function render(d){
         const scoreCol=w.window_score>=8?'var(--green)':w.window_score>=4?'var(--yellow)':'var(--muted)';
         // Score adjustment meta (compact pills)
         const metaBits=[];
-        if(w.tide_bonus) metaBits.push(`+${w.tide_bonus} tide`);
-        if(w.push_penalty) metaBits.push(`−${w.push_penalty} ${w.push_penalty_why||'push winds'}`);
-        if(w.penalty) metaBits.push(`−${w.penalty} ${w.penalty_why}`);
-        if(w.inc_bonus) metaBits.push(`+${w.inc_bonus} pre-rain`);
-        if(w.wave_bonus) metaBits.push(`+${w.wave_bonus} waves`);
+        if(w.tide_bonus) metaBits.push(`+${w.tide_bonus} tide`);
+        if(w.push_penalty) metaBits.push(`-${w.push_penalty} ${w.push_penalty_why||'push winds'}`);
+        if(w.penalty) metaBits.push(`-${w.penalty} ${w.penalty_why}`);
+        if(w.inc_bonus) metaBits.push(`+${w.inc_bonus} pre-rain`);
+        if(w.wave_bonus) metaBits.push(`+${w.wave_bonus} waves`);
         // Tide quality: exposure fraction vs NOAA station MHW datum
         const tideQual=w.tide_label||'';
         const isRowBest=w.qualifies&&bestWinScore>=5&&w.window_score===bestWinScore;
         return `<div class="tide-row${w.qualifies?' tide-row-qualify':''}">`
           +`<div class="tide-row-top">`
           +`<span class="tide-row-time">${w.time}</span>`
-          +`<span class="tide-row-ht">${w.height.toFixed(2)} ft MLLW — ${w.station_label||'Cove Point'}</span>`
+          +`<span class="tide-row-ht">${w.height.toFixed(2)} ft MLLW - ${w.station_label||'Cove Point'}</span>`
           +`<span class="tide-row-score" style="color:${scoreCol}">${w.window_score}/10${isRowBest?' ⭐':''}</span>`
           +'</div>'
           +(tideQual?`<div class="tide-row-meta" style="color:#93c5fd;font-style:italic">🌊 ${tideQual}</div>`:'')
@@ -422,7 +421,7 @@ function render(d){
   if(isAllSites){
     se.innerHTML='<div class="no-sig" style="color:var(--muted);font-style:italic">Select an individual site to see scoring signals.</div>';
   } else if(!sigs||!sigs.length){
-    se.innerHTML='<div class="no-sig">No scoring signals detected — conditions are calm.<br>Score updates after storm activity in the past 72h.</div>';
+    se.innerHTML='<div class="no-sig">No scoring signals detected - conditions are calm.<br>Score updates after storm activity in the past 72h.</div>';
   } else {
     const rows=sigs.map(s=>`<div class="sig-row"><span class="sig-text">${s.text}</span><span class="sig-pts">+${s.pts}</span></div>`).join('');
     se.innerHTML=`<div class="sig-list">${rows}</div>
@@ -446,7 +445,7 @@ function render(d){
     wr.innerHTML=`
       <div class="wind-stat"><div class="wind-val" style="color:${wc}">${lbl}</div><div class="wind-lbl">Direction</div></div>
       <div class="wind-stat"><div class="wind-val">${(curSpd||0).toFixed(0)} mph</div><div class="wind-lbl">Speed</div></div>
-      <div class="wind-stat"><div class="wind-val" style="color:${wc};font-size:.8rem">${good?'✓ Bay-clearing':bad?'✗ Bay-pushing':'— Neutral'}</div><div class="wind-lbl">Effect</div></div>`;
+      <div class="wind-stat"><div class="wind-val" style="color:${wc};font-size:.8rem">${good?'✓ Bay-clearing':bad?'✗ Bay-pushing':'- Neutral'}</div><div class="wind-lbl">Effect</div></div>`;
   }
 
   // Error
@@ -457,7 +456,7 @@ function render(d){
   const tideData = (pick.key!=='all' && d.sites)? {tide_chart: d.sites[pick.key]?.tide_chart || d.tide_chart, noon_lines: d.sites[pick.key]?.noon_lines || d.noon_lines} : {tide_chart:d.tide_chart,noon_lines:d.noon_lines};
   renderTide(tideData);
   const tct=document.getElementById('tideChartTitle');
-  if(tct) tct.textContent=(isAllSites)?'Tide Forecast (Calvert — Cove Point, MD)':('Tide Forecast — '+(sd.station_label||sd.station||'NOAA Tides'));
+  if(tct) tct.textContent=(isAllSites)?'Tide Forecast (Calvert - Cove Point, MD)':('Tide Forecast - '+(sd.station_label||sd.station||'NOAA Tides'));
   const rainData = (pick.key!=='all' && d.sites)? {rain_chart: d.sites[pick.key]?.rain_chart || d.rain_chart} : {rain_chart:d.rain_chart};
   renderRain(rainData);
 
@@ -586,16 +585,14 @@ function renderRain(d){
   });
 }
 
-async function loadData(force=false){
-  document.getElementById('refreshBtn').disabled=true;
+async function loadData(){
   try{
-    if(force) await fetch('api/refresh');
     const r=await fetch('api/data');
     if(!r.ok) throw new Error(`HTTP ${r.status}`);
     const payload=await r.json();
     if(payload.loading){
-      // Server still initializing — show status and retry in 5s
-      document.getElementById('ts').textContent=payload.message||'Initializing…';
+      // Server still initializing - show status and retry in 5s
+      document.getElementById('ts').textContent=payload.message||'Initializing...';
       document.getElementById('errBox').style.display='none';
       setTimeout(()=>loadData(),5000);
       return;
@@ -605,12 +602,9 @@ async function loadData(force=false){
     document.getElementById('ts').textContent='Error loading data';
     document.getElementById('errBox').style.display='block';
     document.getElementById('errBox').textContent='Failed to load data: '+e.message;
-  } finally {
-    document.getElementById('refreshBtn').disabled=false;
   }
 }
 
-function forceRefresh(){loadData(true);} 
 loadData();
 setInterval(()=>loadData(),AUTO_MS);
 document.getElementById('siteSelect').addEventListener('change',()=>{ if(lastData) render(lastData); });
