@@ -926,6 +926,12 @@ def api_refresh():
     threading.Thread(target=_do_refresh, daemon=True).start()
     return jsonify({"ok": True, "next_ok_in": REFRESH_MIN_SECONDS, "status": "refresh_queued"})
 
+@app.route("/_ah/warmup")
+def warmup():
+    """Cloud Run warmup handler — called before traffic is sent to a new instance.
+    The background refresh thread is already running by this point; just return 200."""
+    return "", 200
+
 @app.route("/healthz")
 def healthz():
     nowt = time.time()
