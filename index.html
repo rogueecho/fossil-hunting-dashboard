@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🦈Fossil Hunting Dashboard</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" integrity="sha384-e6nUZLBkQ86NJ6TVVKAeSaK8jWa3NhkYWZFomE39AvDbQWeie9PlQqM3pmYW5d1g" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js" integrity="sha384-cVMg8E3QFwTvGCDuK+ET4PD341jF3W8nO1auiXfuZNQkzbUUiBGLsIQUE+b1mxws" crossorigin="anonymous"></script>
 <style>
 :root{--bg:#080c12;--card:#0f1623;--border:#1e2736;--text:#e2e8f0;--muted:#64748b;--green:#22c55e;--yellow:#eab308;--orange:#f97316;--red:#ef4444;--blue:#3b82f6;--accent:#6366f1}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -269,6 +269,17 @@ a{color:var(--blue);text-decoration:none}
 let tideChart=null, rainChart=null, lastData=null;
 const AUTO_MS = 15*60*1000;
 
+// CWE-79: HTML-escape all server-sourced strings before innerHTML injection
+function escHtml(s){
+  if(s==null) return '';
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
 
 function scoreColor(s){
   if(s>=7) return '#22c55e';
@@ -375,8 +386,8 @@ function render(d){
         // Score adjustment meta (compact pills)
         const metaBits=[];
         if(w.tide_bonus) metaBits.push(`+${w.tide_bonus} tide`);
-        if(w.push_penalty) metaBits.push(`-${w.push_penalty} ${w.push_penalty_why||'push winds'}`);
-        if(w.penalty) metaBits.push(`-${w.penalty} ${w.penalty_why}`);
+        if(w.push_penalty) metaBits.push(`-${w.push_penalty} ${escHtml(w.push_penalty_why||'push winds')}`);
+        if(w.penalty) metaBits.push(`-${w.penalty} ${escHtml(w.penalty_why)}`);
         if(w.inc_bonus) metaBits.push(`+${w.inc_bonus} pre-rain`);
         if(w.wave_bonus) metaBits.push(`+${w.wave_bonus} waves`);
         // Tide quality: exposure fraction vs NOAA station MHW datum
@@ -385,23 +396,23 @@ function render(d){
         return `<div class="tide-row${w.qualifies?' tide-row-qualify':''}">`
           +`<div class="tide-row-top">`
           +`<span class="tide-row-time">${w.time}</span>`
-          +`<span class="tide-row-ht">${w.height.toFixed(2)} ft MLLW - ${w.station_label||'Cove Point'}</span>`
+          +`<span class="tide-row-ht">${w.height.toFixed(2)} ft MLLW - ${escHtml(w.station_label||'Cove Point')}</span>`
           +`<span class="tide-row-score" style="color:${scoreCol}">${w.window_score}/10${isRowBest?' ⭐':''}</span>`
           +'</div>'
-          +(tideQual?`<div class="tide-row-meta" style="color:#93c5fd;font-style:italic">🌊 ${tideQual}</div>`:'')
+          +(tideQual?`<div class="tide-row-meta" style="color:#93c5fd;font-style:italic">🌊 ${escHtml(tideQual)}</div>`:'')
           +(metaBits.length?`<div class="tide-row-meta">${metaBits.join(' · ')}</div>`:'')
-          +(w.wind_warn?`<div class="tide-row-warn">⚠️ ${w.wind_warn}</div>`:'')
-          +((w.penalty||w.push_penalty)?`<div class="tide-row-penalty">🚨 ${[w.penalty_why,w.push_penalty_why].filter(Boolean).join(' · ')}</div>`:'')
+          +(w.wind_warn?`<div class="tide-row-warn">⚠️ ${escHtml(w.wind_warn)}</div>`:'')
+          +((w.penalty||w.push_penalty)?`<div class="tide-row-penalty">🚨 ${[w.penalty_why,w.push_penalty_why].filter(Boolean).map(escHtml).join(' · ')}</div>`:'')
           +'</div>';
       }).join('');
       return `<div class="win-card" style="border-color:${borderColor}">`
         +`<div class="win-date-header">`
-        +`<span class="win-date">📅 ${group.date}${wkBadge}</span>`
+        +`<span class="win-date">📅 ${escHtml(group.date)}${wkBadge}</span>`
         +(isBestDay?'<span class="best-badge">⭐ Best Day</span>':'')
         +`</div>`
-        +(group.location?`<div class="win-loc">📍 ${group.location}</div>`:'')
+        +(group.location?`<div class="win-loc">📍 ${escHtml(group.location)}</div>`:'')
         +`<div class="tide-rows">${tideRows}</div>`
-        +`<div class="win-site">🗺️ ${bestTide?bestTide.site:''}</div>`
+        +`<div class="win-site">🗺️ ${bestTide?escHtml(bestTide.site):''}</div>`
         +'</div>';
     }).join('');
   }
@@ -423,7 +434,7 @@ function render(d){
   } else if(!sigs||!sigs.length){
     se.innerHTML='<div class="no-sig">No scoring signals detected - conditions are calm.<br>Score updates after storm activity in the past 72h.</div>';
   } else {
-    const rows=sigs.map(s=>`<div class="sig-row"><span class="sig-text">${s.text}</span><span class="sig-pts">+${s.pts}</span></div>`).join('');
+    const rows=sigs.map(s=>`<div class="sig-row"><span class="sig-text">${escHtml(s.text)}</span><span class="sig-pts">+${escHtml(s.pts)}</span></div>`).join('');
     se.innerHTML=`<div class="sig-list">${rows}</div>
       <hr class="sig-divider">
       <div class="sig-total">

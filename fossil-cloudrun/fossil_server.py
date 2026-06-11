@@ -13,6 +13,23 @@ from werkzeug.serving import run_simple
 
 app = Flask(__name__)
 
+@app.after_request
+def set_security_headers(response):
+    """CWE-693/1021: Add security headers to all responses."""
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+        "style-src 'self' 'unsafe-inline'; "
+        "connect-src 'self'; "
+        "img-src 'self' data:; "
+        "frame-ancestors 'none';"
+    )
+    return response
+
 # ── Config ────────────────────────────────────────────────────────────────
 # Default site (Calvert/Flag Pond)
 NOAA_STATION    = "8577330"   # Cove Point, MD
@@ -86,11 +103,15 @@ PORT             = int(os.environ.get('PORT', 5003))
 HOST             = '0.0.0.0'
 APPLICATION_ROOT = os.environ.get('APPLICATION_ROOT', '/')
 CACHE_TTL       = 3600          # hourly background refresh
-REFRESH_MIN_SECONDS = 60          # minimum gap between manual refresh requests
 HEADERS         = {"User-Agent": "FossilHuntingDashboard/1.0 miku@openclaw"}
 
 # Alerting (disabled unless webhook is provided)
 ALERT_WEBHOOK_URL   = os.environ.get("FOSSIL_ALERT_WEBHOOK", "").strip()
+# CWE-319: enforce HTTPS for webhook to prevent cleartext delivery
+if ALERT_WEBHOOK_URL and not ALERT_WEBHOOK_URL.startswith("https://"):
+    import sys
+    print(f"WARNING: FOSSIL_ALERT_WEBHOOK must use HTTPS. Got: {ALERT_WEBHOOK_URL[:30]}... Disabling.", file=sys.stderr)
+    ALERT_WEBHOOK_URL = ""
 ALERT_LOOKAHEAD_DAYS= int(os.environ.get("FOSSIL_ALERT_LOOKAHEAD_DAYS", "3"))
 ALERT_MIN_SCORE     = int(os.environ.get("FOSSIL_ALERT_MIN_SCORE", str(SCORE_THRESHOLD)))
 ALERT_QUIET_START   = int(os.environ.get("FOSSIL_ALERT_QUIET_START", "22"))  # 24h clock
@@ -102,7 +123,6 @@ _HEAVY_RAIN_CODES = {65, 66, 67, 81, 82}
 _RAIN_CODES       = {51, 53, 55, 61, 63, 80}
 
 _cache = {"data": None, "at": 0}
-_last_refresh_req = 0.0
 _state = {
     "weather":       {"data": None, "ok": False, "err": None, "at": 0.0, "last_ok": 0.0},
     "alerts":        {"data": None, "ok": False, "err": None, "at": 0.0, "last_ok": 0.0},
@@ -904,33 +924,6 @@ def api_data():
         return jsonify({"loading": True, "message": "Server is initializing, please wait…"})
     return jsonify(cached)
 
-@app.route("/api/refresh")
-def api_refresh():
-    global _last_refresh_req
-    nowt = time.time()
-    with _lock:
-        if nowt - _last_refresh_req < REFRESH_MIN_SECONDS:
-            return jsonify({"ok": False, "reason": f"rate_limited: wait {int(REFRESH_MIN_SECONDS - (nowt - _last_refresh_req))}s"}), 429
-        _last_refresh_req = nowt
-    # Trigger async rebuild without blocking the HTTP response
-    def _do_refresh():
-        try:
-            data = build_data()
-            with _lock:
-                _cache["data"] = data
-                _cache["at"]   = time.time()
-        except Exception as e:
-            with _lock:
-                if _cache["data"]:
-                    _cache["data"]["error"] = str(e)
-    threading.Thread(target=_do_refresh, daemon=True).start()
-    return jsonify({"ok": True, "next_ok_in": REFRESH_MIN_SECONDS, "status": "refresh_queued"})
-
-@app.route("/_ah/warmup")
-def warmup():
-    """Cloud Run warmup handler — called before traffic is sent to a new instance.
-    The background refresh thread is already running by this point; just return 200."""
-    return "", 200
 
 @app.route("/healthz")
 def healthz():
@@ -941,14 +934,14 @@ def healthz():
             "ok": v["ok"],
             "age_sec": round(nowt - v["at"], 1) if v["at"] else None,
             "since_ok_sec": round(nowt - v["last_ok"], 1) if v["last_ok"] else None,
-            "err": v["err"],
+            # CWE-200: omit raw error strings from public endpoint
+            "err": bool(v["err"]),
         } for k, v in _state.items()
     }
     overall_ok = all((v["ok"] or v["data"]) for v in _state.values())
     return jsonify({
         "ok": overall_ok,
         "cache_age_sec": round(data_age, 1) if data_age is not None else None,
-        "last_refresh_req": _last_refresh_req,
         "sources": hs,
     })
 
